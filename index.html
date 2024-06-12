@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEAD</title>
+  <link rel="stylesheet" href="./src/index.css">
+</head>
+
+<body>
+  <div style="display: flex;">
+    <div class="title" style="display: flex; flex-direction: column;">
+      <button id="lead-btn-1" style="cursor: pointer; padding: 10px 20px;">按钮一</button>
+      <button id="lead-btn-2" style="cursor: pointer; padding: 10px 20px;">按钮二</button>
+      <button id="lead-btn-3" style="cursor: pointer; padding: 10px 20px;">按钮三</button>
+      <button id="lead-btn-4" style="cursor: pointer; padding: 10px 20px;">按钮四</button>
+    </div>
+    <div style="margin-top: 250px;">
+      <img id="lead-img-1" style="width: 200px; height: 300px;" src="./images/i-1.jpg" alt="">
+      <img id="lead-img-2" style="width: 200px; height: 300px;" src="./images/i-2.jpg" alt="">
+      <img id="lead-img-3" style="width: 200px; height: 300px;" src="./images/i-3.jpg" alt="">
+      <img id="lead-img-4" style="width: 200px; height: 300px;" src="./images/i-4.jpg" alt="">
+    </div>
+  </div>
+  <script type="module">
+    import('./src/index.js')
+      .then(({ default: lead }) => {
+        lead({
+          steps: [
+          [
+              {
+                element: '#lead-btn-2'
+              },
+              {
+                element: '#lead-img-2'
+              }
+            ],
+            [
+              {
+                element: '#lead-btn-1'
+              },
+              {
+                element: '#lead-img-1'
+              }
+            ],
+            [
+              {
+                element: '#lead-btn-4'
+              },
+              {
+                element: '#lead-img-4'
+              }
+            ],
+            [
+              {
+                element: '#lead-btn-3'
+              },
+              {
+                element: '#lead-img-3'
+              }
+            ],
+
+          ]
+        })
+      })
+  </script>
+</body>
+
+</html>
