@@ -57,22 +57,28 @@ function createNextEle(){
   nextStep.className = 'lead-next-btn'
   return nextStep
 }
+function cleanEffectStyle(dom) {
+  Object.assign(dom.style, dom.originStyle)
+}
 
 export default function lead (options){
   const mask = setMask();
   const canvas = setCanvas()
   let nextStep = null
   const stopBtn = createStopBtn(destroy)
-  
+  const domsMap = {}
   let currentStep = 0;
   const { steps } = options
   function handleStep() {
     const step = steps[currentStep]
     const doms = step.map(elementOption => {
       const dom = document.querySelector(elementOption.element);
+      domsMap[elementOption.element] = dom;
+      const { position, zIndex, backgroundColor } = dom.style;
+      dom.originStyle = { position, zIndex, backgroundColor }
       dom.style.position = 'relative';
       dom.style.zIndex = '3007';
-      // dom.style.border = '2px solid #fff';
+      dom.style.backgroundColor = '#fff'
       return dom
     })
     doms.reduce((prev,curr) => {
@@ -84,7 +90,7 @@ export default function lead (options){
   function setNextEle(prev, curr){
     nextStep = createNextEle()
     // 创建下一步element
-    nextStep.innerHTML = `下一步(${currentStep + 1}/${steps.length})`;
+    nextStep.innerHTML = currentStep === steps.length - 1 ? '完成' : `下一步(${currentStep + 1}/${steps.length})`;
     nextStep.style.top = curr.getBoundingClientRect().bottom + 20 + 'px';
     nextStep.style.left = curr.getBoundingClientRect().left + curr.getBoundingClientRect().width / 2 - 50 + 'px';
     nextStep.addEventListener('click', handleNext)
@@ -94,8 +100,8 @@ export default function lead (options){
         // 擦除canvas画的线
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
         // 清除prev,curr的高亮样式
-        prev.style.zIndex = 0;
-        curr.style.zIndex = 0;
+        cleanEffectStyle(prev);
+        cleanEffectStyle(curr);
         nextStep.remove()
         handleStep()
       }else{
@@ -110,9 +116,12 @@ export default function lead (options){
     mask.remove();
     canvas.remove();
     nextStep.remove();
-    stopBtn.remove()
+    stopBtn.remove();
+    Object.values(domsMap).forEach(dom => cleanEffectStyle(dom))
   }
 
   handleStep()
+
+  return destroy;
 }
 
